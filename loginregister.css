@@ -1,0 +1,89 @@
+/* Genel stil ayarları */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(to right, #667eea, #764ba2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* Form kapsayıcı */
+.loginregister {
+  background-color: white;
+  padding: 30px 40px;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+/* Başlık */
+.loginregister h2 {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* Label ve input düzeni */
+.loginregister label {
+  float: left;
+  margin: 8px 0 4px;
+  color: #555;
+  font-weight: 500;
+}
+
+.loginregister input[type="text"],
+.loginregister input[type="email"],
+.loginregister input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  font-size: 1em;
+}
+
+/* Buton */
+.loginregister input[type="submit"] {
+  width: 100%;
+  padding: 10px;
+  background-color: #667eea;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.loginregister input[type="submit"]:hover {
+  background-color: #5a67d8;
+}
+
+/* Sol üst köşeye sabit logo tipi navbar */
+.navbar-left {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+}
+
+.navbar-logo {
+  color: white;
+  background-color: #333;
+  text-decoration: none;
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding: 10px 16px;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.navbar-logo:hover {
+  background-color: #555;
+}
+
