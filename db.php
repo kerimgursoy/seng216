@@ -1,16 +1,13 @@
 <?php
 $servername = "localhost";
-$username = "phpmyadmin"; // ya da root
-$password = "";
+$username = "phpmyadmin";
+$password = "medici";
 $database = "SENG216";
 
-// Bağlantıyı oluştur
 $conn = new mysqli($servername, $username, $password, $database);
 
-// Bağlantı kontrolü
 if ($conn->connect_error) {
-    die("Bağlantı başarısız: " . $conn->connect_error);
+    die("Connection Failed: " . $conn->connect_error);
 }
 
-// echo "Bağlantı başarılı!";
 ?>
