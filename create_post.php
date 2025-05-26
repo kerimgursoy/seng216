@@ -1,42 +1,43 @@
 <?php
-// display error
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
 session_start();
+require 'db.php';
 
-// session
-if (!isset($_SESSION["user_id"])) {
-    die("Giriş yapılmamış veya oturum süresi dolmuş.");
+// 1) Only logged-in users
+if (!isset($_SESSION['user_id'])) {
+    header('Location: login.php');
+    exit;
 }
 
-require_once "db.php";
-
-// POST
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $content = trim($_POST["content"] ?? '');
-    $user_id = $_SESSION["user_id"];
-
-    if (empty($content)) {
-        die("Boş içerik gönderilemez.");
+$error = '';
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // 2) Trim & validate length
+    $content = trim($_POST['content'] ?? '');
+    if ($content === '') {
+        $error = 'Post content cannot be empty.';
+    } elseif (mb_strlen($content) > 500) {
+        $error = 'Post too long (max 500 characters).';
+    } else {
+        // 3) Prepared statement to prevent SQL injection
+        $stmt = $conn->prepare(
+          'INSERT INTO posts (user_id, content, created_at) VALUES (?, ?, NOW())'
+        );
+        $stmt->bind_param('is', $_SESSION['user_id'], $content);
+        if ($stmt->execute()) {
+            header('Location: index.php');
+            exit;
+        } else {
+            $error = 'Database error, please try again.';
+        }
     }
-
-    // SQL
-    $sql = "INSERT INTO posts (user_id, content) VALUES (?, ?)";
-    $stmt = mysqli_prepare($conn, $sql);
-
-    if (!$stmt) {
-        die("Sorgu hazırlanamadı: " . mysqli_error($conn));
-    }
-
-    // parameter binding
-    mysqli_stmt_bind_param($stmt, "is", $user_id, $content);
-    mysqli_stmt_execute($stmt);
-
-    header("Location: index.php");
-    exit();
-} else {
-    echo "Geçersiz istek.";
 }
 ?>
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><title>New Post</title></head>
+<body>
+  <?php if ($error): ?>
+    <p style="color:red"><?= htmlspecialchars($error) ?></p>
+  <?php endif ?>
+  <!-- (Optionally re-display the form here) -->
+</body>
+</html>
