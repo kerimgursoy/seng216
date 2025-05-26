@@ -1,3 +1,4 @@
+/* post.css */
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin: 0;
@@ -20,14 +21,12 @@ h2, h3 {
   align-items: center;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
-
 .navbar-logo a {
   color: white;
   text-decoration: none;
   font-size: 1.6rem;
   font-weight: bold;
 }
-
 .navbar-links {
   list-style: none;
   display: flex;
@@ -35,7 +34,6 @@ h2, h3 {
   margin: 0;
   padding: 0;
 }
-
 .navbar-links li a {
   color: white;
   text-decoration: none;
@@ -43,7 +41,6 @@ h2, h3 {
   border-radius: 6px;
   transition: background-color 0.3s ease;
 }
-
 .navbar-links li a:hover {
   background-color: rgba(255, 255, 255, 0.2);
 }
@@ -60,7 +57,6 @@ form input[type="text"] {
   font-size: 14px;
   background-color: #fff;
 }
-
 form input[type="submit"] {
   background-color: #1da1f2;
   color: white;
@@ -72,7 +68,6 @@ form input[type="submit"] {
   border-radius: 6px;
   transition: background-color 0.3s ease;
 }
-
 form input[type="submit"]:hover {
   background-color: #0d8ddb;
 }
@@ -86,15 +81,53 @@ form input[type="submit"]:hover {
   border-radius: 6px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 }
-
 .comment strong {
   color: #1da1f2;
   font-weight: 600;
 }
-
 .comment em {
   font-size: 12px;
   color: #666;
   display: block;
   margin-top: 4px;
+}
+
+/* ========== Responsive Breakpoints ========== */
+
+/* Mobile (under 600px): stack navbar, full-width content */
+@media (max-width: 599px) {
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1rem;
+  }
+  .navbar-links {
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+  }
+  body {
+    padding: 0 10px;
+  }
+  form textarea,
+  form input[type="text"] {
+    max-width: 100%;
+  }
+}
+
+/* Tablet (600px–899px): center forms */
+@media (min-width: 600px) and (max-width: 899px) {
+  form {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+}
+
+/* Desktop (900px and up): wide layout */
+@media (min-width: 900px) {
+  body {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
 }
