@@ -1,12 +1,11 @@
 <?php
 session_start();
-if (isset($_SESSION["user"])) {
-    header("Location: index.php");
+if (isset($_SESSION['user_id'])) {
+    header('Location: index.php');
     exit();
 }
 
-require_once "db.php";
-
+require 'db.php';
 if (isset($_POST["login"])) {
     $email = $_POST["email"];
     $password = $_POST["password"];
