@@ -2,37 +2,54 @@
 session_start();
 require_once "db.php";
 
-if (!isset($_SESSION["user_id"], $_POST["followed_id"])) {
-    header("Location: index.php");
-    exit();
+// login control
+if (!isset($_SESSION["user_id"])) {
+    http_response_code(403);
+    echo json_encode(["success" => false, "error" => "Unauthorized"]);
+    exit;
 }
 
 $follower_id = $_SESSION["user_id"];
-$followed_id = (int)$_POST["followed_id"];
+$followed_id = filter_input(INPUT_POST, 'followed_id', FILTER_VALIDATE_INT);
+$csrf = $_POST["csrf_token"] ?? '';
 
-if ($follower_id === $followed_id) {
-    header("Location: index.php"); // Kendisini takip edemez
-    exit();
+if (!$followed_id || !hash_equals($_SESSION["csrf_token"], $csrf)) {
+    http_response_code(400);
+    echo json_encode(["success" => false, "error" => "Invalid input or CSRF token"]);
+    exit;
 }
 
-// Zaten takip ediyor mu?
-$check = mysqli_prepare($conn, "SELECT 1 FROM follows WHERE follower_id = ? AND followed_id = ?");
-mysqli_stmt_bind_param($check, "ii", $follower_id, $followed_id);
-mysqli_stmt_execute($check);
-mysqli_stmt_store_result($check);
+// follow control
+$stmt = $conn->prepare("SELECT 1 FROM follows WHERE follower_id = ? AND followed_id = ?");
+$stmt->bind_param("ii", $follower_id, $followed_id);
+$stmt->execute();
+$stmt->store_result();
 
-if (mysqli_stmt_num_rows($check) > 0) {
-    // Takip ediyorsa → sil
-    $del = mysqli_prepare($conn, "DELETE FROM follows WHERE follower_id = ? AND followed_id = ?");
-    mysqli_stmt_bind_param($del, "ii", $follower_id, $followed_id);
-    mysqli_stmt_execute($del);
+if ($stmt->num_rows > 0) {
+    // unfollow
+    $stmt = $conn->prepare("DELETE FROM follows WHERE follower_id = ? AND followed_id = ?");
+    $stmt->bind_param("ii", $follower_id, $followed_id);
+    $stmt->execute();
+    $status = "unfollowed";
 } else {
-    // Takip etmiyorsa → ekle
-    $add = mysqli_prepare($conn, "INSERT INTO follows (follower_id, followed_id) VALUES (?, ?)");
-    mysqli_stmt_bind_param($add, "ii", $follower_id, $followed_id);
-    mysqli_stmt_execute($add);
+    // follow
+    $stmt = $conn->prepare("INSERT INTO follows (follower_id, followed_id) VALUES (?, ?)");
+    $stmt->bind_param("ii", $follower_id, $followed_id);
+    $stmt->execute();
+    $status = "followed";
 }
 
-// Profili kimse ziyaret ettiyse oraya geri dön
-header("Location: profile.php?user=" . urlencode($_POST["username"]));
-exit();
+// follower count
+$stmt = $conn->prepare("SELECT COUNT(*) AS total FROM follows WHERE followed_id = ?");
+$stmt->bind_param("i", $followed_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$follower_count = $result->fetch_assoc()["total"] ?? 0;
+
+// return
+header("Content-Type: application/json");
+echo json_encode([
+    "success" => true,
+    "status" => $status,
+    "follower_count" => $follower_count
+]);

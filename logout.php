@@ -1,16 +1,16 @@
 <?php
 session_start();
 
-// Unset all session variables
+// unset session
 $_SESSION = [];
 
-// If you’re using cookies for sessions, expire that cookie too:
+// expire cookie
 if (ini_get("session.use_cookies")) {
     $params = session_get_cookie_params();
     setcookie(
-        session_name(),    // usually PHPSESSID
+        session_name(),
         '',
-        time() - 42000,    // in the past
+        time() - 42000,
         $params["path"],
         $params["domain"],
         $params["secure"],
@@ -18,9 +18,7 @@ if (ini_get("session.use_cookies")) {
     );
 }
 
-// Finally destroy the session on the server
 session_destroy();
 
-// Send the user back to login
 header('Location: login.php');
 exit;

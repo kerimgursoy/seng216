@@ -2,31 +2,51 @@
 session_start();
 require_once "db.php";
 
-if (!isset($_SESSION["user_id"], $_POST["post_id"])) {
-    header("Location: index.php");
+// json response setting
+header("Content-Type: application/json");
+
+// session and CSRF
+if (
+    !isset($_SESSION["user_id"], $_POST["post_id"], $_POST["csrf_token"]) ||
+    !hash_equals($_SESSION["csrf_token"], $_POST["csrf_token"])
+) {
+    http_response_code(403);
+    echo json_encode(["error" => "Unauthorized or invalid CSRF token."]);
     exit();
 }
 
+// post ID check
 $user_id = $_SESSION["user_id"];
-$post_id = (int)$_POST["post_id"];
-
-// Zaten kaydetmiş mi?
-$check = mysqli_prepare($conn, "SELECT 1 FROM bookmarks WHERE user_id = ? AND post_id = ?");
-mysqli_stmt_bind_param($check, "ii", $user_id, $post_id);
-mysqli_stmt_execute($check);
-mysqli_stmt_store_result($check);
-
-if (mysqli_stmt_num_rows($check) > 0) {
-    // Varsa → Sil
-    $del = mysqli_prepare($conn, "DELETE FROM bookmarks WHERE user_id = ? AND post_id = ?");
-    mysqli_stmt_bind_param($del, "ii", $user_id, $post_id);
-    mysqli_stmt_execute($del);
-} else {
-    // Yoksa → Ekle
-    $insert = mysqli_prepare($conn, "INSERT INTO bookmarks (user_id, post_id) VALUES (?, ?)");
-    mysqli_stmt_bind_param($insert, "ii", $user_id, $post_id);
-    mysqli_stmt_execute($insert);
+$post_id = filter_input(INPUT_POST, "post_id", FILTER_VALIDATE_INT);
+if (!$post_id) {
+    http_response_code(400);
+    echo json_encode(["error" => "Invalid post ID."]);
+    exit();
 }
 
-header("Location: index.php");
-exit();
+// Bookmark check
+$check = $conn->prepare("SELECT 1 FROM bookmarks WHERE user_id = ? AND post_id = ?");
+$check->bind_param("ii", $user_id, $post_id);
+$check->execute();
+$check->store_result();
+
+if ($check->num_rows > 0) {
+    // delete if bookmarked
+    $del = $conn->prepare("DELETE FROM bookmarks WHERE user_id = ? AND post_id = ?");
+    $del->bind_param("ii", $user_id, $post_id);
+    $success = $del->execute();
+    $bookmarked = false;
+} else {
+    // add if bookmarked
+    $insert = $conn->prepare("INSERT INTO bookmarks (user_id, post_id) VALUES (?, ?)");
+    $insert->bind_param("ii", $user_id, $post_id);
+    $success = $insert->execute();
+    $bookmarked = true;
+}
+
+if ($success) {
+    echo json_encode(["success" => true, "bookmarked" => $bookmarked]);
+} else {
+    http_response_code(500);
+    echo json_encode(["error" => "Database error occurred."]);
+}
