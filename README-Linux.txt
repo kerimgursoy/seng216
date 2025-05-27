@@ -1,3 +1,4 @@
+
 ==================================
 Social Media Web Application - Installation Guide (Linux)
 ==================================
@@ -16,28 +17,38 @@ Make sure the following are installed:
 
 Install them using:
 
-```bash
 sudo apt update
 sudo apt install apache2 mysql-server php php-mysql php-mbstring php-curl php-xml php-zip phpmyadmin
-===========================================
-Create a directory under Apache root:
+
+During PHPMyAdmin installation, make sure to configure it with the MySQL server.
+
+-------------------------------
+2. Setup Web Directory
+-------------------------------
+1. Create a new directory under Apache root:
+
 sudo mkdir /var/www/html/socialapp
 
-copy all project files into this directory.
+2. Copy all project files into this directory:
 
-Ensure permissions:
+sudo cp -r * /var/www/html/socialapp/
+
+3. Ensure permissions:
+
 sudo chown -R www-data:www-data /var/www/html/socialapp
 
-configure database
+-------------------------------
+3. Configure Database
+-------------------------------
+1. Open PHPMyAdmin at:
 
-Open PHPHMyadmin at:
 http://localhost/phpmyadmin
 
-connect your database to the project using db.php
+2. Create a new database, for example: social_db
 
-================================================
-query for phpmyadmin console:
+3. Select the database and run the following SQL queries:
 
+-- Users
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     usrname VARCHAR(50) UNIQUE NOT NULL,
@@ -47,7 +58,7 @@ CREATE TABLE users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Post Entity
+-- Posts
 CREATE TABLE posts (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
@@ -56,7 +67,7 @@ CREATE TABLE posts (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
--- Comment Entity
+-- Comments
 CREATE TABLE comments (
     id INT AUTO_INCREMENT PRIMARY KEY,
     post_id INT NOT NULL,
@@ -67,7 +78,7 @@ CREATE TABLE comments (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
--- Like Entity
+-- Likes
 CREATE TABLE likes (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
@@ -78,7 +89,7 @@ CREATE TABLE likes (
     FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE
 );
 
--- Bookmark Entity
+-- Bookmarks
 CREATE TABLE bookmarks (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
@@ -89,7 +100,7 @@ CREATE TABLE bookmarks (
     FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE
 );
 
--- Follow Entity
+-- Follows
 CREATE TABLE follows (
     id INT AUTO_INCREMENT PRIMARY KEY,
     follower_id INT NOT NULL,
@@ -100,9 +111,36 @@ CREATE TABLE follows (
     FOREIGN KEY (followed_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
-========================================================
+-------------------------------
+4. Configure Database Connection
+-------------------------------
+In your project directory, open db.php and set your database credentials:
 
-Now, go to your browser and open:
+$host = 'localhost';
+$db   = 'social_db';
+$user = 'root';
+$pass = ''; // or your MySQL password
+$conn = new mysqli($host, $user, $pass, $db);
+
+-------------------------------
+5. Run the Application
+-------------------------------
+Now go to your browser and open:
+
 http://localhost/socialapp/
 
-Make sure Apache and MySQL are running.
+You should see the homepage or login/register page.
+
+-------------------------------
+6. Notes
+-------------------------------
+- Make sure Apache and MySQL are running:
+
+sudo systemctl start apache2
+sudo systemctl start mysql
+
+- Use sudo systemctl enable apache2 to start Apache automatically on boot.
+
+Enjoy your application!
+
+==================================
