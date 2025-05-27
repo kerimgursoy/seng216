@@ -4,7 +4,7 @@ $servername = "localhost";
 
 $username = "phpmyadmin"; 
 
-$password = "medici";
+$password = "";
 
 $database = "SENG216";
 

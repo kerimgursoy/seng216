@@ -2,11 +2,11 @@
 session_start();
 require_once "db.php";
 
-// AJAX olup olmadığını kontrol et
+// check if ajax
 $is_ajax = !empty($_SERVER['HTTP_X_REQUESTED_WITH']) &&
            strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
 
-// Giriş kontrolü
+//session
 if (!isset($_SESSION['user_id']) || !isset($_SESSION['user'])) {
     if ($is_ajax) {
         http_response_code(403);
@@ -21,7 +21,7 @@ $post_id = filter_input(INPUT_POST, 'post_id', FILTER_VALIDATE_INT);
 $content = trim($_POST['content'] ?? '');
 $csrf = $_POST['csrf_token'] ?? '';
 
-// CSRF kontrolü
+// CSRF 
 if (!hash_equals($_SESSION['csrf_token'], $csrf)) {
     if ($is_ajax) {
         http_response_code(400);
@@ -32,7 +32,7 @@ if (!hash_equals($_SESSION['csrf_token'], $csrf)) {
     exit;
 }
 
-// Veri kontrolü
+// check data
 if (!$post_id || $content === '' || mb_strlen($content) > 300) {
     if ($is_ajax) {
         http_response_code(400);
@@ -43,7 +43,7 @@ if (!$post_id || $content === '' || mb_strlen($content) > 300) {
     exit;
 }
 
-// Veritabanına yorum ekle
+// post to db
 $stmt = $conn->prepare(
     "INSERT INTO comments (post_id, user_id, content, created_at) VALUES (?, ?, ?, NOW())"
 );
@@ -66,7 +66,7 @@ if ($is_ajax) {
         echo json_encode(['success' => false, 'error' => 'Database error']);
     }
 } else {
-    // klasik form submit sonrası aynı sayfaya dön
+    // main page
     header("Location: " . $_SERVER['HTTP_REFERER']);
 }
 ?>
