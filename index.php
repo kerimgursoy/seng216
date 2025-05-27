@@ -34,12 +34,13 @@ $result = $conn->query($sql);
   <meta charset="UTF-8">
   <title>Home</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="index.css">
-  <link rel="stylesheet" href="theme.css">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/png" href="favicon.png">
+
 </head>
 <body>
   <nav class="navbar">
-    <div class="navbar-logo"><a href="index.php">MyApp</a></div>
+    <div class="navbar-logo"><a href="index.php">SociaLink</a></div>
     <ul class="navbar-links">
       <li><a href="feed.php">📥 Feed</a></li>
       <li><a href="bookmarks.php">🔖 Bookmarks</a></li>

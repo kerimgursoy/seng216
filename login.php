@@ -58,13 +58,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["login"])) {
     <title>Login</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="loginregister.css">
+    <link rel="icon" type="image/png" href="favicon.png">
+
 </head>
 <body>
-<nav class="navbar-left">
-    <div class="navbar-logo">
-        <a href="index.php">MyApp</a>
-    </div>
-</nav>
 
 <div class="loginregister">
     <h2>Login</h2>

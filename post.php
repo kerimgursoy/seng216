@@ -40,12 +40,14 @@ if (!($row = $result->fetch_assoc())) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Post</title>
-    <link rel="stylesheet" href="post.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="favicon.png">
+
 </head>
 <body>
 <nav class="navbar">
     <div class="navbar-logo">
-        <a href="index.php">MyApp</a>
+        <a href="index.php">SociaLink</a>
     </div>
     <ul class="navbar-links">
         <li><a href="feed.php">📥 Feed</a></li>

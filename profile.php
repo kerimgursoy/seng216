@@ -29,20 +29,21 @@ $viewer_id = $_SESSION["user_id"] ?? null;
 <head>
   <meta charset="UTF-8">
   <title><?= htmlspecialchars($user_data["usrname"]) ?>'s Profile</title>
-  <link rel="stylesheet" href="index.css">
-  <link rel="stylesheet" href="theme.css">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/png" href="favicon.png">
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
 <nav class="navbar">
-  <div class="navbar-logo"><a href="index.php">MyApp</a></div>
+  <div class="navbar-logo"><a href="index.php">SociaLink</a></div>
   <ul class="navbar-links">
     <li><a href="feed.php">📥 Feed</a></li>
     <li><a href="bookmarks.php">🔖 Bookmarks</a></li>
     <li><a href="logout.php">Logout</a></li>
   </ul>
 </nav>
-
+<div id="top-profile">
 <h2><?= htmlspecialchars($user_data["usrname"]) ?>'s Posts</h2>
 
 <?php
@@ -74,7 +75,7 @@ if ($viewer_id && !$is_owner) {
       <button type="submit"><?= $isFollowing ? "Unfollow" : "Follow" ?></button>
     </form>
 <?php } ?>
-
+</div>
 <div class="post-list">
 <?php
 $sql = "SELECT id AS post_id, content, created_at,

@@ -1,119 +1,206 @@
-/* Genel stil ayarları */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+/* base */
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(to right, #667eea, #764ba2);
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(-45deg, #6D83F2, #A178EB, #F28BC1, #F2A678);
+  background-size: 400% 400%;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh;
+  overflow: hidden;
+  animation: gradientBackground 20s ease infinite;
 }
 
-/* Form kapsayıcı */
+
+@keyframes gradientBackground {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* login form*/
 .loginregister {
-  background-color: white;
-  padding: 30px 40px;
-  border-radius: 16px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  background: rgba(255, 255, 255, 0.95);
+  padding: 40px 50px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   width: 100%;
   max-width: 400px;
   box-sizing: border-box;
   text-align: center;
+  animation: fadeIn 0.8s ease-out;
+  position: relative;
 }
 
-/* Başlık */
+/* Logo */
+.loginregister .logo {
+  width: 80px;
+  margin-bottom: 20px;
+  animation: float 4s ease-in-out infinite;
+}
+
+/* heading */
 .loginregister h2 {
   margin-bottom: 20px;
   color: #333;
+  font-size: 1.8em;
+  display: inline-block;
+  animation: fadeIn 1.2s ease-out;
 }
 
-/* Label ve input düzeni */
+/* labels */
 .loginregister label {
-  float: left;
-  margin: 8px 0 4px;
+  display: block;
+  text-align: left;
+  margin: 10px 0 5px;
   color: #555;
   font-weight: 500;
+  opacity: 0;
+  animation: fadeIn 1s ease-out forwards;
+  animation-delay: 0.5s;
 }
 
+/* inputs */
 .loginregister input[type="text"],
 .loginregister input[type="email"],
 .loginregister input[type="password"] {
   width: 100%;
-  padding: 10px;
-  margin-bottom: 15px;
+  padding: 12px 15px;
+  margin-bottom: 20px;
   border-radius: 8px;
-  border: 1px solid #ccc;
-  box-sizing: border-box;
+  border: 2px solid #ddd;
   font-size: 1em;
+  box-sizing: border-box;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  opacity: 0;
+  animation: fadeIn 1s ease-out forwards;
+}
+.loginregister input[type="text"]    { animation-delay: 0.6s; }
+.loginregister input[type="email"]   { animation-delay: 0.7s; }
+.loginregister input[type="password"]{ animation-delay: 0.8s; }
+
+.loginregister input:focus {
+  border-color: #6D83F2;
+  outline: none;
+  box-shadow: 0 0 8px rgba(109, 131, 242, 0.4);
 }
 
-/* Buton */
+/* Placeholder style */
+.loginregister ::placeholder {
+  color: #aaa;
+  opacity: 1;
+}
+
+/* (Remember & Forgot) (removed)*/
+.loginregister .options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9em;
+  margin-bottom: 20px;
+  opacity: 0;
+  animation: fadeIn 1s ease-out forwards;
+  animation-delay: 0.9s;
+}
+.loginregister .options input[type="checkbox"] {
+  margin-right: 5px;
+}
+
+/* forgot password(removed)*/
+.loginregister .options a {
+  display: inline-block;
+  padding: 6px 12px;
+  border: 2px solid #6D83F2;
+  border-radius: 6px;
+  background-color: transparent;
+  color: #6D83F2;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background-color 0.3s, color 0.3s, transform 0.2s;
+  opacity: 0;
+  animation: fadeIn 1s ease-out forwards;
+  animation-delay: 1s;
+}
+.loginregister .options a:hover {
+  background-color: #6D83F2;
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+/* Pulsing Submit Button */
 .loginregister input[type="submit"] {
   width: 100%;
-  padding: 10px;
-  background-color: #667eea;
+  padding: 12px;
+  background-color: #6D83F2;
   color: white;
   border: none;
   border-radius: 8px;
   font-size: 1em;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s, transform 0.2s;
+  animation: pulse 3s ease-in-out infinite 2s;
+  opacity: 0;
+  animation: fadeIn 1s ease-out forwards;
+  animation-delay: 1.2s;
 }
-
 .loginregister input[type="submit"]:hover {
-  background-color: #5a67d8;
+  background-color: #5a6fca;
+  transform: translateY(-2px);
+  animation-play-state: paused;
 }
 
-/* Sol üst köşeye sabit logo tipi navbar */
+/* Footer link */
+.loginregister .footer {
+  margin-top: 25px;
+  font-size: 0.9em;
+  opacity: 0;
+  animation: fadeIn 1s ease-out forwards;
+  animation-delay: 1.4s;
+}
+.loginregister .footer a {
+  color: #6D83F2;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+.loginregister .footer a:hover {
+  color: #5a6fca;
+}
+
+/* Navbar left animation */
 .navbar-left {
   position: absolute;
   top: 20px;
   left: 20px;
+  opacity: 0;
+  animation: fadeIn 1s ease-out forwards;
+  animation-delay: 0.3s;
 }
-
 .navbar-logo {
   color: white;
   background-color: #333;
   text-decoration: none;
   font-size: 1.2rem;
-  font-weight: bold;
-  padding: 10px 16px;
-  border-radius: 8px;
-  transition: background-color 0.3s ease;
-}
-
-.navbar-logo:hover {
-  background-color: #555;
-}
-
-
-
-/* ===== Responsive Design ===== */
-@media (max-width: 768px) {
-  body {
-    padding: 10px;
-    font-size: 16px;
-  }
-  .navbar {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .navbar-links {
-    flex-direction: column;
-    width: 100%;
-  }
-  .post {
-    padding: 10px;
-    margin-bottom: 15px;
-  }
-  textarea, input[type="text"], input[type="email"], input[type="password"] {
-    width: 100%;
-    box-sizing: border-box;
-  }
-  .post-actions {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-  }
+  font-weight: bold
 }

@@ -19,15 +19,11 @@ if (empty($_SESSION['csrf_token'])) {
     <link rel="stylesheet" href="loginregister.css">
     <meta charset="UTF-8">
     <title>Register</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-
-<nav class="navbar-left">
-    <div class="navbar-logo">
-      <a href="index.php">MyApp</a>
-    </div>
-</nav>
 
 <div class="loginregister">
 <?php
